@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block title %}
+  <title>Strategies</title>
+{% endblock %}
+
+
+
+{% block strat_sel %}
+<a href="{{url_for('strategies')}}" class="nav-link active" aria-current="page">
+{% endblock %}
+
+
+{% block main%}
+
+{% for plotdata in plotsdata %}
+<div class = "homesection">
+  <h2 style="text-align: center;">{{plotdata[3]}}</h2>
+  <canvas id={{"Chart_" + loop.index|string}}></canvas>
+  <script>
+    new Chart({{"Chart_" + loop.index|string}}, {
+    type: "{{plotdata[2]}}",
+    data: {
+      labels: {{ plotdata[0] | safe}},
+      datasets: [{
+        data: {{ plotdata[1] | safe}},
+        barBackgroundColor:"rgba(13, 110, 253, 1)",
+        lineBorderColor:"rgba(13, 110, 253, 0.5)",
+
+        pointBorderColor: "rgba(13, 110, 253, 1.0)",
+        pointBackgroundColor: "rgba(13, 110, 253, 0.1)",
+      }]
+    },
+    options: {
+        plugins: {
+            legend: {
+                display: false
+            },
+        }
+    }
+  });
+  </script>
+
+</div>
+{% endfor %}
+
+<div class = "homesection">
+  <h2 style="text-align: center;">Trades table</h2>
+    <table style="width: 100%;">
+      <thead>
+        <tr>
+        {% for key, value in trades[0].items() %}
+          {% if (key != 'trade_time') and (key != 'quantity') %}
+          <th>{{key}}</th>
+          {% endif %}
+        {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for trade in trades %}
+          <tr>
+            {% for key, value in trade.items() %}
+              {% if (key != 'trade_time') and (key != 'quantity') %}
+                <td>{{value}}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+  <title>Strategies</title>
+{% endblock %}
+
+{% block strat_sel %}
+<a href="{{url_for('strategies')}}" class="nav-link active" aria-current="page">
+{% endblock %}
+
+
+{% block main%}
+  {% for ev in evs %}
+    <a href="{{ url_for('strategy', evnum = loop.index ) }}" style="all: unset;">
+      <div class = "homesectioncube">
+        <h2 style="text-align: center; margin-bottom: 50px">Ev {{loop.index}}</h2>
+        <p class="lead">Some blurb about {{ev}}
+        </p>
+      </div>
+    </a>
+  {% endfor %}
+
+  <!-- <div class="clear"></div>
+  <div class = "homesection">
+    <p class="lead">
+      <em>Block 3 placeholder</em>
+      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam,
+      feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Mauris
+      placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae,
+      ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui.
+        Donec non enim in turpis pulvinar facilisis. Ut felis.
+    </p>
+  </div> -->
+
+{% endblock %}
