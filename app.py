@@ -26,6 +26,7 @@ Session(app)
 
 # Configure CS50 Library to use SQLite database
 uri = os.getenv("DATABASE_URL")
+#uri = "postgres://qrqddhzewuxjmc:53aabf770c1e2286a5b24342de2abc3a7d79ca3f20ba757c03ccf7926e366ced@ec2-54-228-32-29.eu-west-1.compute.amazonaws.com:5432/dbdr747am0agcd"
 if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://")
 db = SQL(uri)
@@ -136,10 +137,10 @@ def dashboard():
 def strategies():
     reg = re.compile('^crypto_trades')
     evs = []
-    tables = db.execute("SELECT * FROM information_schema.tables;")
+    tables = db.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public';")
     for x in tables:
-        if reg.match(x['name']):
-            evs.append(x['name'])
+        if reg.match(x['table_name']):
+            evs.append(x['table_name'])
     return render_template("strategies.html", evs=evs, username=session["username"])
 
 @app.route("/strategy/<evnum>")
@@ -147,10 +148,10 @@ def strategies():
 def strategy(evnum):
     reg = re.compile('^crypto_trades')
     evs = []
-    tables = db.execute("SELECT * FROM information_schema.tables;")
+    tables = db.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public';")
     for x in tables:
-        if reg.match(x['name']):
-            evs.append(x['name'])
+        if reg.match(x['table_name']):
+            evs.append(x['table_name'])
     if len(evs) < int(evnum):
         return apology("invalid strategy", 400)
     ev = evs[int(evnum)-1]
@@ -176,7 +177,7 @@ def strategy(evnum):
     xval = temp.reset_index().index.tolist()
     yval = temp.ret.tolist()
     plots.append([xval, yval, "scatter", "Trade against return" , 1])
-    print(plots)
+    
     return render_template("strategy.html", trades=table, plotsdata=plots, username=session["username"])
 
 @app.route("/settings")
