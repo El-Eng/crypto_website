@@ -8,9 +8,8 @@ from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 import re
 import pandas as pd
-
 from helpers import apology, login_required, usd
-os.environ["API_KEY"] = "pk_b70e54072f98441d85495437a532cd49"
+
 # Configure application
 app = Flask(__name__)
 
@@ -26,15 +25,13 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
-uri = os.getenv("DATABASE_URL")
+#uri = os.getenv("DATABASE_URL")
+uri = "postgres://qrqddhzewuxjmc:53aabf770c1e2286a5b24342de2abc3a7d79ca3f20ba757c03ccf7926e366ced@ec2-54-228-32-29.eu-west-1.compute.amazonaws.com:5432/dbdr747am0agcd"
 if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://")
 db = SQL(uri)
 # db = SQL("sqlite:///finance.db")
 
-# Make sure API key is set
-if not os.environ.get("API_KEY"):
-    raise RuntimeError("API_KEY not set")
 
 
 @app.after_request
