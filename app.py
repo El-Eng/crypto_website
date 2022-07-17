@@ -1,6 +1,4 @@
 import os
-
-
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, url_for, render_template_string
 from flask_session import Session
@@ -9,6 +7,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import re
 import pandas as pd
 from helpers import apology, login_required, usd
+
+dev = False
 
 # Configure application
 app = Flask(__name__)
@@ -24,13 +24,13 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Configure CS50 Library to use SQLite database
-uri = os.getenv("DATABASE_URL")
-if uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://")
-db = SQL(uri)
-# db = SQL("sqlite:///finance.db")
-
+if dev:
+    db = SQL("sqlite:///finance.db")
+else:
+    uri = os.getenv("DATABASE_URL")
+    if uri.startswith("postgres://"):
+        uri = uri.replace("postgres://", "postgresql://")
+    db = SQL(uri)
 
 
 @app.after_request
@@ -136,10 +136,17 @@ def dashboard():
 def strategies():
     reg = re.compile('^crypto_trades')
     evs = []
-    tables = db.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public';")
-    for x in tables:
-        if reg.match(x['table_name']):
-            evs.append(x['table_name'])
+    if dev:
+        tables = db.execute("SELECT name FROM sqlite_schema WHERE type='table' ORDER BY name;")
+        for x in tables:
+            if reg.match(x['name']):
+                evs.append(x['name'])
+    else:
+        tables = db.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public';")
+        for x in tables:
+            if reg.match(x['table_name']):
+                evs.append(x['table_name'])
+
     return render_template("strategies.html", evs=evs, username=session["username"])
 
 @app.route("/strategy/<evnum>")
@@ -147,10 +154,17 @@ def strategies():
 def strategy(evnum):
     reg = re.compile('^crypto_trades')
     evs = []
-    tables = db.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public';")
-    for x in tables:
-        if reg.match(x['table_name']):
-            evs.append(x['table_name'])
+    if dev:
+        tables = db.execute("SELECT name FROM sqlite_schema WHERE type='table' ORDER BY name;")
+        for x in tables:
+            if reg.match(x['name']):
+                evs.append(x['name'])
+    else:
+        tables = db.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public';")
+        for x in tables:
+            if reg.match(x['table_name']):
+                evs.append(x['table_name'])
+
     if len(evs) < int(evnum):
         return apology("invalid strategy", 400)
     ev = evs[int(evnum)-1]

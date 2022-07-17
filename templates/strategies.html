@@ -12,9 +12,9 @@
 {% block main%}
   {% for ev in evs %}
     <a href="{{ url_for('strategy', evnum = loop.index ) }}" style="all: unset;">
-      <div class = "homesectioncube">
-        <span class="fs-4" style="vertical-align: middle; text-align: center; margin-top: 50px; font-family:CodeLight; letter-spacing: 10px; font-size: 240px; font-weight: 1000;">Ev {{loop.index}}</span>
-        <span class="lead" style="vertical-align: bottom"> Label: {{ev}}</span>
+      <div class = "homesectioncube" >
+        <p style="vertical-align: middle; text-align: center; font-family:CodeLight; letter-spacing: 30px; font-size: 120px; font-weight: 1000; margin-top: 15%;" >Ev {{loop.index}}</p>
+        <p style="text-align: right; margin-top: 40%;"> Label: {{ev}}</p>
       </div>
     </a>
   {% endfor %}
