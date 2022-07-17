@@ -14,7 +14,7 @@
     <a href="{{ url_for('strategy', evnum = loop.index ) }}" style="all: unset;">
       <div class = "homesectioncube">
         <p class="fs-4" style="text-align: center; margin-bottom: 50px; font-family:CodeLight; letter-spacing: 10px; font-size: 64px; font-weight: 1000;">Ev {{loop.index}}</p>
-        <p class="lead" style="position: fixed; bottom: 0;"> Label: </p> {{ev}}</p>
+        <p class="lead" style="position: fixed; bottom: 0;"> Label: {{ev}}</p>
       </div>
     </a>
   {% endfor %}
