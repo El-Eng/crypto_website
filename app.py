@@ -162,7 +162,7 @@ def strategy(evnum):
     df.rename(columns={'crypto_id': 'id', 'date_buy': 'tbuy', 'date_sell': 'tsell', 'price_buy': 'pbuy', 'price_sell': 'psell', 'trade_return': 'ret',}, inplace=True)
 
     temp = df.sort_values(by=['tbuy'])
-    xval = temp.tbuy.tolist()
+    xval = [i[:-7] for i in temp.tbuy.tolist()]
     yval =  temp['ret'].cumprod().tolist()
     plots.append([xval, yval, "line" , "Cumulative product of percentage gain over time"])
 
@@ -207,7 +207,8 @@ def buy():
         if (not isinstance(quantity, int)) or (quantity <= 0):
             return apology("Invalid quantiy", 400)
 
-        stock = lookup(symbol)
+        #stock = lookup(symbol)
+        stock = "NULL"
 
         if (stock) == None:
             return apology("Invalid symbol", 400)
